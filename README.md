@@ -9,7 +9,7 @@ The controller is evaluated through MATLAB/Simulink simulations using multiple r
 
 ## System Architecture
 
-![MPC-based quadcopter control architecture](architecture.png)
+![MPC-based quadcopter control architecture](images/architecture.png)
 
 
 The quadcopter is modeled as a nonlinear, underactuated system with coupled translational and rotational dynamics.  
