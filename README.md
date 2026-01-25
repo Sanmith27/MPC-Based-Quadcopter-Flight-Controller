@@ -8,9 +8,13 @@ The controller is evaluated through MATLAB/Simulink simulations using multiple r
 ---
 
 ## System Architecture
-The quadcopter is modeled using a full nonlinear Newton–Euler formulation with 12 state variables representing position, velocity, Euler angles, and angular rates.  
-The control inputs consist of total thrust and three body-axis torques.  
-The nonlinear model is linearized around the hover equilibrium to obtain a discrete-time state-space representation suitable for MPC.
+
+![MPC-based quadcopter control architecture](architecture.png)
+
+
+The quadcopter is modeled as a nonlinear, underactuated system with coupled translational and rotational dynamics.  
+A Model Predictive Controller (MPC) computes optimal control inputs based on the current system state and reference trajectory while explicitly enforcing actuator and state constraints.  
+The controller operates in a receding-horizon manner, applying only the first control input at each time step.
 
 ---
 
@@ -50,13 +54,12 @@ At each control step, the MPC solves a constrained optimization problem and appl
 ---
 
 ## Results and Observations
-- Stable flight maintained throughout all simulations  
-- Accurate tracking of 3D reference trajectories with minimal steady-state error  
-- Smooth control inputs after initial transient response  
-- Motor speeds converge to realistic hover values (~900–1200 rad/s)  
-- Attitude angles and angular rates exhibit well-damped behavior  
+![Trajectory tracking performance](trajectory_tracking.png)
 
-The results demonstrate that MPC provides smoother trajectory tracking, improved constraint handling, and better stability compared to conventional controllers.
+The MPC controller achieves stable and smooth trajectory tracking for multiple reference paths, including circular and altitude-varying trajectories.  
+State variables remain within defined constraints, and control inputs converge to realistic steady-state values after initial transients.  
+Compared to conventional controllers, MPC demonstrates improved handling of multivariable coupling and constraint enforcement.
+
 
 ---
 
