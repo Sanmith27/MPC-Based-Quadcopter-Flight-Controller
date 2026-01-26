@@ -2,7 +2,7 @@ clear all;
 close all;
 clc;
 
-%% Parameters
+% Parameters
 g = 9.81;              % Gravity (m/s^2)
 m = 1.0;               % Mass of quadcopter (kg)
 Ts = 0.1;              % Sample time (s)
@@ -69,7 +69,7 @@ Ad = sys_disc.A;
 Bd = sys_disc.B;
 Cd = sys_disc.C;
 
-%% Precompute Prediction Matrices
+% Precompute Prediction Matrices
 Q_bar = kron(eye(P), Q);
 R_bar = kron(eye(M), R);
 S_bar = kron(eye(M), S);
@@ -95,12 +95,12 @@ for i = 1:M
 end
 d0 = repmat(-u_prev, M, 1);
 
-%% QP Setup
+% QP Setup
 H = Phi' * Q_bar * Phi + R_bar + Du' * S_bar * Du;
 H = (H + H') / 2 + 1e-6 * eye(size(H)); % Regularization for stability
 % f will be computed in loop
 
-%% Constraints Setup
+% Constraints Setup
 u_min_rep = kron(ones(M,1), u_min);
 u_max_rep = kron(ones(M,1), u_max);
 du_min_rep = kron(ones(M,1), du_min) - d0;
@@ -114,7 +114,7 @@ b_y = [y_max_rep; -y_min_rep];
 A_ineq = [eye(M*nu); -eye(M*nu); A_du; A_y];
 b_ineq = [u_max_rep; -u_min_rep; b_du; b_y];
 
-%% Simulation Loop
+% Simulation Loop
 x = x0;
 x_history = zeros(nx, sim_steps+1);
 u_history = zeros(nu, sim_steps);
@@ -153,7 +153,7 @@ for k = 1:sim_steps
     u_prev = u;
 end
 
-%% Plots
+% Plots
 t = (0:sim_steps) * Ts;
 figure(1);
 subplot(3,1,1); plot(t(1:end-1), y_history(1,:)); ylabel('px (m)'); title('Positions');
@@ -166,3 +166,4 @@ subplot(3,1,2); plot(t(1:end-1), u_history(2,:)); ylabel('theta (rad)');
 subplot(3,1,3); plot(t(1:end-1), m * (u_history(3,:) + g)); ylabel('thrust (N)'); xlabel('Time (s)');
 
 disp('Simulation complet.');
+
