@@ -46,7 +46,7 @@ At each control step, the MPC solves a constrained optimization problem and appl
 ---
 
 ## Simulation Setup
-- Implemented the quadcopter model and MPC controller in MATLAB/Simulink  
+- Implemented the quadcopter model and MPC controller in MATLAB 
 - Tested with multiple reference trajectories:
   - Circular motion in the X–Y plane
   - Linear altitude changes
