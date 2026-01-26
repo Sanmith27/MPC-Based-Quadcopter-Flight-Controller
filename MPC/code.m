@@ -13,40 +13,16 @@ Iz = 15.078E-3;
 dx=0; dy=0; dz=0; % disturbances
 kx=0.04; ky=0.04; kz=1.05; 
 
-% States
+% States Considered
 % x=[x y z vx vy vz roll pitch yaw wr wp wy];
 
-% Control
+% Control Inputs
 % u=[T tr tp ty];
 
-%% Space-state model
-%{
+%% State space model simplified
+% sin(x) -> x; cos(x) -> 1; tan(x) -> x; considering no disturbance
 syms x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12
 syms u1 u2 u3 u4
-xdot1=x4;
-xdot2=x5;
-xdot3=x6;
-xdot4=(u1/m)*(cos(x9)*sin(x8)*cos(x7)+sin(x9)*sin(x7))-kx*x4/m+dx/m;
-xdot5=(u1/m)*(sin(x9)*sin(x8)*cos(x7)-cos(x9)*sin(x7))-ky*x5/m+dy/m;
-xdot6=(u1/m)*cos(x8)*cos(x7)-g-kz*x6/m+dz/m;
-xdot7=x10+x11*sin(x7)*tan(x8)+x12*cos(x7)*tan(x8);
-xdot8=x11*cos(x7)-x12*sin(x7);
-xdot9=sin(x7)*x11/cos(x8)+cos(x7)*x12/cos(x8);
-xdot10=(u2/Ix)-((Iy-Iz)/Ix)*x11*x12;
-xdot11=(u3/Iy)-((Iz-Ix)/Iy)*x10*x12;
-xdot12=(u4/Iz)-((Ix-Iy)/Iz)*x10*x11;
-xdot=[xdot1 xdot2 xdot3 xdot4 xdot5 xdot6 xdot7 xdot8 xdot9 xdot10 xdot11 xdot12]';
-x=[x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12]';
-u=[u1 u2 u3 u4];
-y=[x1 x2 x3 x7 x8 x9]';
-
-%}
-
-%% Model simplification
-% sin(x) -> x; cos(x) -> 1; tan(x) -> x; no disturbances
-syms x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12
-syms u1 u2 u3 u4
-
 xdot1=x4;
 xdot2=x5;
 xdot3=x6;
@@ -59,7 +35,6 @@ xdot9=x7*x11+x12;
 xdot10=(u2/Ix)-((Iy-Iz)/Ix)*x11*x12;
 xdot11=(u3/Iy)-((Iz-Ix)/Iy)*x10*x12;
 xdot12=(u4/Iz)-((Ix-Iy)/Iz)*x10*x11;
-
 xdot=[xdot1 xdot2 xdot3 xdot4 xdot5 xdot6 xdot7 xdot8 xdot9 xdot10 xdot11 xdot12].';
 x=[x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12].';
 u=[u1 u2 u3 u4].';
@@ -305,11 +280,12 @@ for i = 1:12
 end
 xlabel('Time step (k)');
 
-%% -------- 3D Trajectory -------------------------
+%% -------- 3D Trajectory Plot -------------------------
 figure;
 plot3(y_vector(1,:), y_vector(2,:), y_vector(3,:), 'LineWidth', 2);
 hold on; grid on;
 plot3(r(1,:), r(2,:), r(3,:), '--', 'LineWidth', 2);
 xlabel('X (m)'); ylabel('Y (m)'); zlabel('Z (m)');
 title('3D Flight Trajectory');
+
 legend('Actual Path', 'Reference Path');
