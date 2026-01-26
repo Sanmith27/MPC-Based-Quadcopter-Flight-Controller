@@ -9,7 +9,9 @@ The controller is evaluated through MATLAB/Simulink simulations using multiple r
 
 ## System Architecture
 
-![MPC-based quadcopter control architecture](images/architecture.png)
+<p align="center">
+  <img src="images/architecture.jpg" width="45%">
+</p>
 
 
 The quadcopter is modeled as a nonlinear, underactuated system with coupled translational and rotational dynamics.  
@@ -54,7 +56,10 @@ At each control step, the MPC solves a constrained optimization problem and appl
 ---
 
 ## Results and Observations
-![Trajectory tracking performance](trajectory_tracking.png)
+
+<p align="center">
+  <img src="images/trajectory.jpg" width="45%">
+</p>
 
 The MPC controller achieves stable and smooth trajectory tracking for multiple reference paths, including circular and altitude-varying trajectories.  
 State variables remain within defined constraints, and control inputs converge to realistic steady-state values after initial transients.  
