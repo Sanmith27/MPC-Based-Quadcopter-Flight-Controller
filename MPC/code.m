@@ -1,8 +1,8 @@
-%% Quadcopter state-space model
+% Quadcopter state-space model
 clc;
 clear all;
 close all;
-%% constants
+% constants
 m=0.70; % mass kg
 g=9.81; 
 
@@ -19,7 +19,7 @@ kx=0.04; ky=0.04; kz=1.05;
 % Control Inputs
 % u=[T tr tp ty];
 
-%% State space model simplified
+% State space model simplified
 % sin(x) -> x; cos(x) -> 1; tan(x) -> x; considering no disturbance
 syms x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12
 syms u1 u2 u3 u4
@@ -45,7 +45,7 @@ y=[x1 x2 x3 x9].';
 [u_size,aux]=size(u);
 
 
-%% Equilibrium points (linearization about hover)
+% Equilibrium points (linearization about hover)
 % ue = [m*g; 0; 0; 0]  (thrust balances weight), other inputs zero
 % xe = [x1; x2; x3; 0;0;0; 0;0;0; 0;0;0] (positions arbitrary, velocities/angles zero)
 
@@ -70,7 +70,7 @@ A = double( subs(A_sym, [x1 x2 x3], [0 0 0]) );
 B = double( subs(B_sym, [x1 x2 x3], [0 0 0]) );
 C = double( subs(C_sym, [x1 x2 x3], [0 0 0]) );
 
-%% Discrete state-space model
+% Discrete state-space model
 fs = 50;
 Ts = 1/fs;
 sysc = ss(A,B,C,zeros(size(C,1),size(B,2))); % D matrix sized properly
@@ -94,13 +94,13 @@ Bm=sysd.B;
 Cm=sysd.C;
 Dm=zeros(x_size,1);
 
-%% MPC
-%% Initialization
+% MPC
+% Initialization
 N_sim=10*fs; %% samples = seconds * frequency
 
 % tuning parameters
-Nc=10;  % control horizon
-Np=50; % prediction horizon
+Nc=15;  % control horizon
+Np=60; % prediction horizon
 R = 0.001;   % control weighting
 
 % Init control, reference and output signal
@@ -128,8 +128,8 @@ Xf=zeros(x_size+y_size,1); % augmented incremental state [deltax y]'
 f1=GG+R*eye(Nc*u_size,Nc*u_size); % E for cost function J=xEx'+x'F
 
 % Constraint matrix M
-ymax=[0.8 1 2];  % output max limits
-ymin=[-0.3 -1 -1.5];  % output min limits
+ymax=[0.9 1 2];  % output max limits
+ymin=[-0.5 -1 -2];  % output min limits
 
 % must test
 deltaumax=500;
@@ -156,7 +156,7 @@ M_u=[aux(1,:);-aux(1,:);
 
 M=[M_output; M_deltau; M_u];
 
-%% LOOP
+% LOOP
 for k=1:N_sim;  
     %% Generate the Reference trajectory
     rx(k)=sin(0.05*k);    
@@ -203,11 +203,11 @@ for k=1:N_sim;
   
 end
 
-%% ---------------------- Plots ----------------------------
+% ---------------------- Plots ----------------------------
 
 p = 0:N_sim-1;
 
-%% -------- Output (y) vs Reference (r) -----------
+% -------- Output (y) vs Reference (r) -----------
 figure;
 for i = 1:4
     subplot(4,1,i)
@@ -225,7 +225,7 @@ for i = 1:4
 end
 xlabel('Time step (k)');
 
-%% -------- Control Input --------------------
+% -------- Control Input --------------------
 figure;
 for i = 1:4
     subplot(4,1,i)
@@ -243,7 +243,7 @@ for i = 1:4
 end
 xlabel('Time step (k)');
 
-%% -------- Control Increment) -----------
+% -------- Control Increment -----------
 figure;
 for i = 1:4
     subplot(4,1,i)
@@ -260,7 +260,7 @@ for i = 1:4
 end
 xlabel('Time step (k)');
 
-%% -------- 12 states --------------------
+% -------- 12 states --------------------
 figure;
 for i = 1:12
     subplot(4,3,i)
@@ -280,7 +280,7 @@ for i = 1:12
 end
 xlabel('Time step (k)');
 
-%% -------- 3D Trajectory Plot -------------------------
+% -------- 3D Trajectory Plot -------------------------
 figure;
 plot3(y_vector(1,:), y_vector(2,:), y_vector(3,:), 'LineWidth', 2);
 hold on; grid on;
@@ -289,3 +289,4 @@ xlabel('X (m)'); ylabel('Y (m)'); zlabel('Z (m)');
 title('3D Flight Trajectory');
 
 legend('Actual Path', 'Reference Path');
+
