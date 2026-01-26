@@ -45,7 +45,7 @@ ref = [10; 10; 5] * ones(1, P);
 % Previous input
 u_prev = zeros(nu, 1);
 
-%% Quadcopter Linear Model
+% Quadcopter Linear Model
 A_cont = [0 1 0 0 0 0;
           0 0 0 0 0 0;
           0 0 0 1 0 0;
@@ -166,4 +166,5 @@ subplot(3,1,2); plot(t(1:end-1), u_history(2,:)); ylabel('theta (rad)');
 subplot(3,1,3); plot(t(1:end-1), m * (u_history(3,:) + g)); ylabel('thrust (N)'); xlabel('Time (s)');
 
 disp('Simulation complet.');
+
 
