@@ -9,7 +9,6 @@ A_e=zeros(q+m1,q+m1);
 A_e(1:q,1:q)=A;
 A_e(q+1:q+m1,1:n1)=H*A;
 A_e(q+1:m1+q,q+1:q+m1)=eye(m1);
-% B_e(1:nb,1:n_in)=B
 B_e=B;
 B_e(nb+1:nb+y1,1:y2)=H*B;
 [y1 y2]=size(H*D);
@@ -56,3 +55,4 @@ Phi_R=Phi_F(1:x1,x2-m1+1:x2);
 [x1,x2]=size(Phi_D);
 Phi_D=10*Phi_D(:,1);
 end
+
